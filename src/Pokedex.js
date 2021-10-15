@@ -6,7 +6,11 @@ class Pokedex extends React.Component {
     super();
     this.state = {
       pokemonIndex: 0,
+      filter: '',
     }
+
+    this.handleChangePokemon = this.handleChangePokemon.bind(this);
+    this.handleFilter = this.handleFilter.bind(this);
   }
 
   handleChangePokemon(incDec) {
@@ -20,13 +24,25 @@ class Pokedex extends React.Component {
       };
     });
   }
+
+  handleFilter(filter) {
+    this.setState({ filter });
+  }
+
   render() {
-    const pokemon = this.props.pokemons[this.state.pokemonIndex]
+
+    const pokemon = this.props.pokemons
+      .filter((({ type }) => type.toLowerCase().includes(this.state.filter)))[this.state.pokemonIndex]
+
     return (
       <div className="pokedex">
         <button onClick={() => this.handleChangePokemon(-1)}>Previus</button>
         <Pokemon key={pokemon.id} pokemon={pokemon} />
         <button onClick={() => this.handleChangePokemon(1)}>Next</button>
+        <div className="filters">
+          <button onClick={() => this.handleFilter('fire')}>Fire</button>
+          <button onClick={() => this.handleFilter('psychic')}>Psychic</button>
+        </div>
       </div>
     );
   }
